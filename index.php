@@ -41,52 +41,70 @@
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
     <style>
-        body {background-color: powderblue;}
-        h1   {color: blue;}
-        p    {color: red;}
+        body {
+            background-color: powderblue;
+        }
+
+        h1 {
+            color: blue;
+        }
+
+        p {
+            color: red;
+        }
+
         .main {
             background-color: yellow;
             margin: 30px
-        }  
-        .blocos{
+        }
+
+        .blocos {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-        } 
-        .bloco {z
-            border: 1px solid black;
+        }
+
+        .bloco {
+            z border: 1px solid black;
             margin: 10px;
             width: 300px
         }
     </style>
-    </head>
-    <body>
-        <div class="main"> 
-            Necessario = 08:00
-            <hr>
-            <div class="blocos">
-                <div class="bloco">
-                    Entrada: <br>
-                    <input type="time" name="start" value="" id="start">
-                    <button id="btnStart">Entrada</button><br>
-                    Saida Almoco: <br>
-                    <input type="time" name="start" value="">
-                    <button id="">Saida Almoco</button><br>
-                    Volta Almoco: <br>
-                    <input type="time" name="start">
-                    <button id="">Entrada Almoco</button><br>
-                    Saida: <br>
-                    <input type="time" name="start">
-                    <button id="">Saida</button><br>
-                </div>
-                <div class="bloco">
-                    <div id="view_start"></div>
-                </div>
-            </div>   
-        </div> 
-    </body>
+</head>
+<body>
+<div class="main">
+    Necessario = 08:00
+    <hr>
+    <div class="blocos">
+        <div class="bloco">
+            Entrada: <br>
+            <input type="time" name="start" value="" id="input_start">
+            <button id="btnStart">Entrada</button>
+            <br>
+            Saida Almoco: <br>
+            <input type="time" name="start" value="" id="input_exit_lunch">
+            <button id="">Saida Almoco</button>
+            <br>
+            Volta Almoco: <br>
+            <input type="time" name="start" id="imput_back_lunch">
+            <button id="">Entrada Almoco</button>
+            <br>
+            Saida: <br>
+            <input type="time" name="start" id="input_exit">
+            <button id="">Saida</button>
+            <br>
+        </div>
+        <div class="bloco">
+            <div id="view_start"></div>
+            <div id="hour_exit_lunch"></div>
+            <div id="hour_back_lunch"></div>
+            <div id="hour_exit"></div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
@@ -99,7 +117,7 @@
 
         $('#btnStart').click(function () {
             var val_start = $('#start').val();
-            $('#view_start').append( "Entrada: " + val_start)
+            $('#view_start').append("Entrada: " + val_start)
         });
 
         $.ajax({
@@ -111,9 +129,35 @@
             dataType: 'json',
             success: function (response) {
                 console.log(response);
+                if (response.status === true) {
+                    beatVefify(response.data)
+                }
             }
 
         });
     });
+
+    function beatVefify(data) {
+        if (data.hour_start) {
+            $('#input_start').val(data.hour_start)
+            $('#view_start').append('Entrada: ' + data.hour_start)
+        }
+
+        if (data.hour_exit_lunch) {
+            $('#input_exit_lunch').val(data.hour_exit_lunch)
+            $('#hour_exit_lunch').append('Saida Almoco: ' + data.hour_exit_lunch)
+        }
+
+        if (data.hour_back_lunch) {
+            $('#imput_back_lunch').val(data.hour_back_lunch)
+            $('#hour_back_lunch').append('Volta do almoco: ' + data.hour_back_lunch)
+        }
+
+        if (data.hour_exit) {
+            $('#input_exit').val(data.hour_exit)
+            $('#hour_exit').append('Entrada: ' + data.hour_exit)
+        }
+    }
+
 </script>
 
