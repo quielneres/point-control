@@ -1,6 +1,6 @@
 <?php
 //
-//include 'functions.php';
+//include 'Controller.php';
 //
 //$start = null;
 //$exit_louch = null;
@@ -104,7 +104,7 @@
 
         $.ajax({
             type: 'post',
-            url: 'functions.php',
+            url: 'Controller.php',
             data: {
                 start: start
             },

@@ -1,28 +1,29 @@
 <?php
 
-$asda = 123;
+include 'config/Conection.php';
 
-class MyDB extends SQLite3 {
-    function __construct() {
-        $this->open('data\ponto.db');
-    }
-}
-$db = new MyDB();
-if(!$db) {
-    echo $db->lastErrorMsg();
-} else {
-    echo "Opened database successfully\n";
-}
+$db = new Conection();
 
-function calc($value1, $value2)
-{
-    $Start = new \DateTime($value1);
-    $end   = new \DateTime($value2);
-    $dateDiff = $Start->diff($end);
-    $result = $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos';
+$sql =<<<EOF
+select * from point_register;
+EOF;
 
-    return $result;
-}
+$ret = $db->query($sql);
+
+$db->close();
+
+//function calc($value1, $value2)
+//{
+//    $Start = new \DateTime($value1);
+//    $end   = new \DateTime($value2);
+//    $dateDiff = $Start->diff($end);
+//    $result = $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos';
+//
+//    return $result;
+//
+//
+//}
+
 
 echo json_encode('23423');
 
