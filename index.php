@@ -29,9 +29,9 @@
 //echo  '<br>';
 //echo 'Entrada => ' . $start . '<br>';
 //echo  '<br>';
-//echo 'Saida Almoço => ' . $exit_louch . '<br>';
+//echo 'Saida Almoï¿½o => ' . $exit_louch . '<br>';
 //echo  '<br>';
-//echo 'Volta Almoço => ' . $back_louch . '<br>';
+//echo 'Volta Almoï¿½o => ' . $back_louch . '<br>';
 
 
 //$worked = calc($now, $start);
@@ -39,20 +39,55 @@
 
 //echo  $worked;
 ?>
-Necessario = 08:00
-<hr>
-Entrada: <br>
-<input type="time" name="start" value="" id="start">
-<button id="btnStart">Entrada</button><br>
-Saida Almoço: <br>
-<input type="time" name="start" value="">
-<button id="">Saida Almoço</button><br>
-Volta Almoço: <br>
-<input type="time" name="start">
-<button id="">Entrada Almoço</button><br>
-Saida: <br>
-<input type="time" name="start">
-<button id="">Saida</button><br>
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+        body {background-color: powderblue;}
+        h1   {color: blue;}
+        p    {color: red;}
+        .main {
+            background-color: yellow;
+            margin: 30px
+        }  
+        .blocos{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        } 
+        .bloco {z
+            border: 1px solid black;
+            margin: 10px;
+            width: 300px
+        }
+    </style>
+    </head>
+    <body>
+        <div class="main"> 
+            Necessario = 08:00
+            <hr>
+            <div class="blocos">
+                <div class="bloco">
+                    Entrada: <br>
+                    <input type="time" name="start" value="" id="start">
+                    <button id="btnStart">Entrada</button><br>
+                    Saida Almoco: <br>
+                    <input type="time" name="start" value="">
+                    <button id="">Saida Almoco</button><br>
+                    Volta Almoco: <br>
+                    <input type="time" name="start">
+                    <button id="">Entrada Almoco</button><br>
+                    Saida: <br>
+                    <input type="time" name="start">
+                    <button id="">Saida</button><br>
+                </div>
+                <div class="bloco">
+                    <div id="view_start"></div>
+                </div>
+            </div>   
+        </div> 
+    </body>
+</html>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
@@ -64,7 +99,7 @@ Saida: <br>
 
         $('#btnStart').click(function () {
             var val_start = $('#start').val();
-            console.log(val_start);
+            $('#view_start').append( "Entrada: " + val_start)
         });
 
         $.ajax({
