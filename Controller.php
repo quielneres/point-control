@@ -11,32 +11,84 @@ $db = new Conection();
 
 $sql = "select *from point_register where created_at LIKE  '%" . date('Y-m-d') . "%';";
 $ret = $db->query($sql);
-$register = $ret->fetchArray(SQLITE3_ASSOC);
+$registers = $ret->fetchArray(SQLITE3_ASSOC);
+
 $db->close();
 
-$beats = null;
-if ($register) {
 
-//    $beats = [
-//        'id' => $register['id'],
-//        'start' => $register['hour_start'],
-//        'exit_lunch' => $register['exit_lunch'],
-//        'back_lunch' => $register['back_lunch'],
-//        'exit' => $register['exit'],
-//    ];
+//controle de quandtas horas ja foram feitas e o quanto ainda falta para acabar
+$hours_total = date('08:00');
+$hours_done = date('00:00');
+$hours_left = date('00:00');
 
-    echo json_encode(['status' => true, 'data' => $register]);
+if ($registers) {
+
+    $time = calcTime($registers);
+
+    $sum_partials =  str_replace(':', '.', '08:00') - str_replace(':', '.', $time['time']);
+    $left = float_min($sum_partials);
+
+
+    $time_control = [
+        'end_day' => $time['end_day'],
+        'hours_done' => $time['time'],
+        'hours_left' => $left
+    ];
+
+    echo json_encode(['status' => true, 'data' => $registers, 'time_control' => $time_control]);
 }
 
-//function calc($value1, $value2)
-//{
-//    $Start = new \DateTime($value1);
-//    $end = new \DateTime($value2);
-//    $dateDiff = $Start->diff($end);
-//    $result = $dateDiff->h . ' horas e ' . $dateDiff->i . ' minutos';
-//
-//    return $result;
-//}
+function calcTime($registers){
+
+    if($registers['hour_start']){
+
+        $now = date('H:i');
+        $start = $registers['hour_start'];
+        $end_day = false;
+
+        $partial = calc($now, $start);
+
+        if($registers['hour_exit_lunch']){
+            $partial_exit_lunch = calc($registers['hour_exit_lunch'], $registers['hour_start']);
+            $partial = $partial_exit_lunch;
+        }
+
+        if($registers['hour_back_lunch']){
+            $partial_back = calc($now, $registers['hour_back_lunch']);
+            $sum_partials =  str_replace(':', '.', $partial) + str_replace(':', '.', $partial_back);
+            $partial = float_min($sum_partials);
+        }
+
+        if ($registers['hour_exit']){
+            $first_period = calc($registers['hour_exit_lunch'], $registers['hour_start']);
+            $second_period = calc($registers['hour_back_lunch'], $registers['hour_exit']);
+            $sum_partials =  str_replace(':', '.', $first_period) + str_replace(':', '.', $second_period);
+            $partial = float_min($sum_partials);
+            $end_day = true;
+        }
+        return ['time' =>$partial, 'end_day' => $end_day];
+    }
+}
+
+function float_min($num) {
+    $num = number_format($num,2);
+    $num_temp = explode('.', $num);
+    $num_temp[1] = $num-(number_format($num_temp[0],2));
+    $saida = number_format(((($num_temp[1]) * 60 / 100)+$num_temp[0]),2);
+    $saida = strtr($saida,'.',':');
+    return $saida;
+    // By Alexandre Quintal - alexandrequintal@yahoo.com.br
+}
+
+function calc($value1, $value2)
+{
+    $Start = new \DateTime($value1);
+    $end = new \DateTime($value2);
+    $dateDiff = $Start->diff($end);
+    $result = $dateDiff->format("%H:%I");
+
+    return $result;
+}
 
 
 

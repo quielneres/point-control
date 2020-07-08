@@ -57,19 +57,20 @@
 
         .main {
             background-color: yellow;
-            margin: 30px
+            margin: 30px;
+            width: 50%;
         }
 
         .blocos {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
+
         }
 
         .bloco {
             z border: 1px solid black;
-            margin: 10px;
-            width: 300px
+            margin: 10px 40px 10px 40px;
         }
     </style>
 </head>
@@ -102,6 +103,11 @@
             <div id="hour_back_lunch"></div>
             <div id="hour_exit"></div>
         </div>
+        <div class="bloco">
+            Necessario = 08:00 <br>
+            <div id="view_hours_done"></div>
+            <div id="view_hours_left"></div>
+        </div>
     </div>
 </div>
 </body>
@@ -131,11 +137,23 @@
                 console.log(response);
                 if (response.status === true) {
                     beatVefify(response.data)
+                    timeControll(response.time_control)
                 }
             }
 
         });
     });
+
+    function timeControll(time_control) {
+
+        $('#view_hours_done').append('Horas feitas: ' + time_control.hours_done)
+        if (time_control.end_day) {
+            $('#view_hours_left').append('Horas em debitos: ' + time_control.hours_left)
+        } else {
+            $('#view_hours_left').append('Horas Restantes: ' + time_control.hours_left)
+        }
+
+    }
 
     function beatVefify(data) {
         if (data.hour_start) {
@@ -155,9 +173,8 @@
 
         if (data.hour_exit) {
             $('#input_exit').val(data.hour_exit)
-            $('#hour_exit').append('Entrada: ' + data.hour_exit)
+            $('#hour_exit').append('Saida: ' + data.hour_exit)
         }
     }
-
 </script>
 
