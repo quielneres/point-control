@@ -1,13 +1,13 @@
 <?php
 
-include 'config/Conection.php';
+include 'config/Connection.php';
 
 $start = null;
 $exit_lunch = null;
 $back_lunch = null;
 $exit = null;
 
-$db = new Conection();
+$db = new Connection();
 
 $sql = "select *from point_register where created_at LIKE  '%" . date('Y-m-d') . "%';";
 $ret = $db->query($sql);
@@ -16,27 +16,6 @@ $registers = $ret->fetchArray(SQLITE3_ASSOC);
 $db->close();
 
 
-//controle de quandtas horas ja foram feitas e o quanto ainda falta para acabar
-$hours_total = date('08:00');
-$hours_done = date('00:00');
-$hours_left = date('00:00');
-
-if ($registers) {
-
-    $time = calcTime($registers);
-
-    $sum_partials =  str_replace(':', '.', '08:00') - str_replace(':', '.', $time['time']);
-    $left = float_min($sum_partials);
-
-
-    $time_control = [
-        'end_day' => $time['end_day'],
-        'hours_done' => $time['time'],
-        'hours_left' => $left
-    ];
-
-    echo json_encode(['status' => true, 'data' => $registers, 'time_control' => $time_control]);
-}
 
 function calcTime($registers){
 

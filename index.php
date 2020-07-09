@@ -1,6 +1,6 @@
 <?php
 //
-//include 'Controller.php';
+//include 'controller.php';
 //
 //$start = null;
 //$exit_louch = null;
@@ -78,6 +78,7 @@
 <div class="main">
     Necessario = 08:00
     <hr>
+    <div id="empty-view"></div>
     <div class="blocos">
         <div class="bloco">
             Entrada: <br>
@@ -128,7 +129,7 @@
 
         $.ajax({
             type: 'post',
-            url: 'Controller.php',
+            url: 'router.php',
             data: {
                 start: start
             },
@@ -139,6 +140,13 @@
                     beatVefify(response.data)
                     timeControll(response.time_control)
                 }
+                if (response.status === false) {
+                    $('#empty-view').append(response.message)
+                }
+            },
+
+            error: function (xhr, status, error) {
+                console.log(xhr, status, error);//Captura o erro e envia ao console
             }
 
         });

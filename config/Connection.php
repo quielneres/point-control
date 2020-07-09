@@ -1,7 +1,7 @@
 <?php
 
 
-class Conection extends SQLite3
+class Connection extends SQLite3
 {
     function __construct()
     {
